@@ -12,6 +12,10 @@ import App from './app';
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
+  },
+
+  extend: {
+    drawerWith: 280
   }
 });
 
