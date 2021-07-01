@@ -10,7 +10,12 @@ import {
 
 import { MaterialTableContainer, TableTitle, THead, Th, Subtitle } from './styles';
 
+import { useOrders } from 'hooks';
+
 function Orders() {
+  const { orders } = useOrders();
+  console.log('ORDERS', orders);
+
   return allOrdersStatus.map(orderStatus => (
     <MaterialTableContainer key={orderStatus.title}>
         <TableTitle>
