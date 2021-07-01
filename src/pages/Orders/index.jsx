@@ -2,66 +2,83 @@ import React from 'react';
 
 import {
   Table,
-  TableHead,
   TableRow,
   TableCell,
   TableBody,
-  TableContainer,
   Typography,
-  Paper
 } from '@material-ui/core';
 
+import { MaterialTableContainer, TableTitle, THead, Th, Subtitle } from './styles';
+
 function Orders() {
-  return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography>
-                Informações do Pedido
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>
-              <div>
-                <Typography variant='button'>
-                  Hórario do Pedido: 10:20h
-                </Typography>
-              </div>
-              <div>
-                <Typography variant='button'>
-                  Pedido:
-                </Typography>
-                <ul>
-                  <li>
-                    <Typography>
-                      1 pizza MÉDIA de {' '}
-                      Frango com Catupiry e Calebresa
-                    </Typography>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <Typography variant='button'>
-                  Endereço de Entrega:
-                </Typography>
+  return allOrdersStatus.map(orderStatus => (
+    <MaterialTableContainer key={orderStatus.title}>
+        <TableTitle>
+          {orderStatus.title}
+        </TableTitle>
+        <Table>
+          <THead>
+            <TableRow>
+              <Th>
                 <Typography>
-                  Rua: Fulano, n18, { '' }
-                  Apt: 120<br />
-                  Bairro: São Pedro - CEP: 06954-041<br />
-                  Rio de Janeiro/RJ
+                  Informações do Pedido
                 </Typography>
-              </div>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+              </Th>
+            </TableRow>
+          </THead>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <div>
+                  <Subtitle>
+                    Hórario do Pedido: 10:20h
+                  </Subtitle>
+                </div>
+                <div>
+                  <Subtitle>
+                    Pedido:
+                  </Subtitle>
+                  <ul>
+                    <li>
+                      <Typography>
+                        1 pizza MÉDIA de {' '}
+                        Frango com Catupiry e Calebresa
+                      </Typography>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <Subtitle>
+                    Endereço de Entrega:
+                  </Subtitle>
+                  <Typography>
+                    Rua: Fulano, n18, { '' }
+                    Apt: 120<br />
+                    Bairro: São Pedro - CEP: 06954-041<br />
+                    Rio de Janeiro/RJ
+                  </Typography>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+    </MaterialTableContainer>
+  ));
 }
+
+const allOrdersStatus = [
+  {
+    title: 'Pedidos pendentes'
+  },
+  {
+    title: 'Pedidos em produção'
+  },
+  {
+    title: 'Saiu para entrega'
+  },
+  {
+    title: 'Pedidos finalizados'
+  },
+]
 
 export default Orders;
