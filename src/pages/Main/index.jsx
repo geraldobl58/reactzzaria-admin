@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { Link, Switch, Route } from 'react-router-dom';
 
 import {
   Typography,
@@ -10,6 +10,12 @@ import {
 } from '@material-ui/core';
 
 import { DrawerContent, Content, MaterialDrawer } from './styles';
+
+import * as routes from 'routes';
+
+const Orders = lazy(() => import('pages/Orders'))
+const PizzasSizes = lazy(() => import ('pages/PizzasSizes'));
+const PizzasFlavours = lazy(() => import('pages/PizzasFlavours'));
 
 const Main = () => (
   <React.Fragment>
@@ -25,7 +31,12 @@ const Main = () => (
       <Divider />
       <List>
         {menuItems.map(item => (
-          <ListItem key={item.label} button>
+          <ListItem
+            key={item.label}
+            button
+            component={Link}
+            to={item.link}
+          >
           <ListItemText>{item.label}</ListItemText>
         </ListItem>
         ))}
@@ -34,9 +45,11 @@ const Main = () => (
     <Content>
       <Suspense fallback='Carregando...'>
         <Switch>
-          <Route>
-            <h1>Main</h1>
-          </Route>
+          {menuItems.map(item => (
+            <Route key={item.link} path={item.link} exact={item.exact}>
+              <item.component />
+            </Route>
+          ))}
         </Switch>
       </Suspense>
     </Content>
@@ -45,13 +58,20 @@ const Main = () => (
 
 const menuItems = [
   {
-    label: 'Pedidos'
+    label: 'Pedidos',
+    link: routes.HOME,
+    component: Orders,
+    exact: true
   },
   {
-    label: 'Tamanhos de Pizzas'
+    label: 'Tamanhos de Pizzas',
+    link: routes.PIZZAS_SIZES,
+    component: PizzasSizes
   },
   {
-    label: 'Sabores de Pizzas'
+    label: 'Sabores de Pizzas',
+    link: routes.PIZZAS_FLAVOURS,
+    component: PizzasFlavours
   }
 ]
 
