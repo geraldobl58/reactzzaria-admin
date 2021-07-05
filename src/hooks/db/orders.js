@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { db } from 'services/firebase';
 
 function useOrders() {
@@ -11,8 +11,8 @@ function useOrders() {
     delivered: 'delivered'
   }), []);
 
-  useEffect(() => {
-    db.collection('orders').get().then(querySnapshot => {
+  const getOrders = useCallback(() => {
+    db.collection('orders').orderBy('createdAt', 'asc').get().then(querySnapshot => {
       const docs = [];
 
       querySnapshot.forEach(doc => {
@@ -41,7 +41,16 @@ function useOrders() {
     });
   }, [status]);
 
-  return { orders, status }
+  const updateOrder = useCallback(async ({ orderId, status }) => {
+    await db.collection('orders').doc(orderId).set({ status }, { merge: true });
+    getOrders();
+  }, [getOrders]);
+
+  useEffect(() => {
+    getOrders();
+  }, [getOrders]);
+
+  return { orders, status, updateOrder }
 }
 
 export default useOrders;

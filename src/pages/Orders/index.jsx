@@ -28,7 +28,7 @@ import { useOrders } from 'hooks';
 import singularOrPlural from 'utils/singularOrPlural';
 
 function Orders() {
-  const { orders, status } = useOrders();
+  const { orders, status, updateOrder } = useOrders();
   console.log('ORDERS', orders);
 
   const allOrdersStatus = useMemo(() => {
@@ -164,7 +164,10 @@ function Orders() {
                       <Fab
                         color='primary'
                         title={`Mudar status para ${orderStatus.nextButtonTitle}`}
-                        onClick={() => console.log('status', orderStatus.nextAction)}
+                        onClick={() => updateOrder({
+                          orderId: order.id,
+                          status: orderStatus.nextAction
+                        })}
                       >
                         <orderStatus.icon />
                       </Fab>
