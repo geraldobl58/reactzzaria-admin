@@ -1,12 +1,19 @@
 import React, { useMemo } from 'react';
 
 import {
+  Fab,
   Table,
   TableRow,
   TableCell,
   TableBody,
   Typography,
 } from '@material-ui/core';
+
+import {
+  Check,
+  DonutLarge,
+  Motorcycle
+} from '@material-ui/icons';
 
 import {
   MaterialTableContainer,
@@ -28,15 +35,24 @@ function Orders() {
     return [
       {
         title: 'Pedidos pendentes',
-        type: status.pending
+        type: status.pending,
+        nextAction: status.inProgress,
+        nextButtonTitle: 'Em Produção',
+        icon: DonutLarge
       },
       {
         title: 'Pedidos em produção',
-        type: status.inProgress
+        type: status.inProgress,
+        nextAction: status.outForDelivery,
+        nextButtonTitle: 'Saiu para entrega',
+        icon: Motorcycle
       },
       {
         title: 'Saiu para entrega',
-        type: status.outForDelivery
+        type: status.outForDelivery,
+        nextAction: status.delivered,
+        nextButtonTitle: 'Entregue',
+        icon: Check
       },
       {
         title: 'Pedidos finalizados',
@@ -67,6 +83,13 @@ function Orders() {
                   Informações do Pedido
                 </Typography>
               </Th>
+              {orderStatus.nextAction && (
+                <Th>
+                  <Typography align='center'>
+                    Mudar Status
+                  </Typography>
+                </Th>
+              )}
             </TableRow>
           </THead>
           <TableBody>
@@ -135,6 +158,17 @@ function Orders() {
                         {city} / {state}
                       </Typography>
                     </div>
+                  </TableCell>
+                  <TableCell align='center'>
+                    {orderStatus.nextAction && (
+                      <Fab
+                        color='primary'
+                        title={`Mudar status para ${orderStatus.nextButtonTitle}`}
+                        onClick={() => console.log('status', orderStatus.nextAction)}
+                      >
+                        <orderStatus.icon />
+                      </Fab>
+                    )}
                   </TableCell>
                 </TableRow>
               )
