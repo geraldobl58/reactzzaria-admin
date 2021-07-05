@@ -16,6 +16,15 @@ function Orders() {
   const { orders } = useOrders();
   console.log('ORDERS', orders);
 
+  function getHour(date) {
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric'
+    };
+
+    return Intl.DateTimeFormat('pt-BR', options).format(date);
+  }
+
   return allOrdersStatus.map(orderStatus => (
     <MaterialTableContainer key={orderStatus.title}>
         <TableTitle>
@@ -32,39 +41,41 @@ function Orders() {
             </TableRow>
           </THead>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <div>
-                  <Subtitle>
-                    Hórario do Pedido: 10:20h
-                  </Subtitle>
-                </div>
-                <div>
-                  <Subtitle>
-                    Pedido:
-                  </Subtitle>
-                  <ul>
-                    <li>
-                      <Typography>
-                        1 pizza MÉDIA de {' '}
-                        Frango com Catupiry e Calebresa
-                      </Typography>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <Subtitle>
-                    Endereço de Entrega:
-                  </Subtitle>
-                  <Typography>
-                    Rua: Fulano, n18, { '' }
-                    Apt: 120<br />
-                    Bairro: São Pedro - CEP: 06954-041<br />
-                    Rio de Janeiro/RJ
-                  </Typography>
-                </div>
-              </TableCell>
-            </TableRow>
+            {orders?.map(order => (
+              <TableRow key={order.id}>
+                <TableCell>
+                  <div>
+                    <Subtitle>
+                      Hórario do Pedido: {getHour(order.createdAt.toDate())}
+                    </Subtitle>
+                  </div>
+                  <div>
+                    <Subtitle>
+                      Pedido:
+                    </Subtitle>
+                    <ul>
+                      <li>
+                        <Typography>
+                          1 pizza MÉDIA de {' '}
+                          Frango com Catupiry e Calebresa
+                        </Typography>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <Subtitle>
+                      Endereço de Entrega:
+                    </Subtitle>
+                    <Typography>
+                      Rua: Fulano, n18, { '' }
+                      Apt: 120<br />
+                      Bairro: São Pedro - CEP: 06954-041<br />
+                      Rio de Janeiro/RJ
+                    </Typography>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
     </MaterialTableContainer>
