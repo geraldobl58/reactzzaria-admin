@@ -29,7 +29,6 @@ import singularOrPlural from 'utils/singularOrPlural';
 
 function Orders() {
   const { orders, status, updateOrder } = useOrders();
-  console.log('ORDERS', orders);
 
   const allOrdersStatus = useMemo(() => {
     return [
