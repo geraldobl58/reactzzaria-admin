@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { db } from 'services/firebase';
 
 function useOrders() {
   const [orders, setOrders] = useState(null);
 
-  useEffect(() => {
-    const initialStatus = {
-      pending: [],
-      inProgress: [],
-      outForDelivery:[],
-      delivered: []
-    }
+  const status = useMemo(() => ({
+    pending: 'pending',
+    inProgress: 'inProgress',
+    outForDelivery: 'outForDelivery',
+    delivered: 'delivered'
+  }), []);
 
+  useEffect(() => {
     db.collection('orders').get().then(querySnapshot => {
       const docs = [];
 
@@ -22,18 +22,26 @@ function useOrders() {
         });
       });
 
-      const newOrders = docs.reduce((acc, doc) => {
-        return {
-          ...acc,
-          pending: acc.pending.concat(doc)
-        }
-      }, initialStatus);
+      const initialStatus = Object.keys(status).reduce((acc, status) => {
+        acc[status] = [];
 
-      setOrders(newOrders);
+        return acc;
+      }, {});
+
+      setOrders(
+        docs.reduce((acc, doc) => {
+          const mainStatus = doc.status || status.pending;
+
+          return {
+            ...acc,
+            [mainStatus]: acc[mainStatus].concat(doc)
+          }
+        }, initialStatus)
+      )
     });
-  }, []);
+  }, [status]);
 
-  return { orders }
+  return { orders, status }
 }
 
 export default useOrders;

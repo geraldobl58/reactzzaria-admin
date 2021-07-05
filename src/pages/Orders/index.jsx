@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import {
   Table,
@@ -21,8 +21,29 @@ import { useOrders } from 'hooks';
 import singularOrPlural from 'utils/singularOrPlural';
 
 function Orders() {
-  const { orders } = useOrders();
+  const { orders, status } = useOrders();
   console.log('ORDERS', orders);
+
+  const allOrdersStatus = useMemo(() => {
+    return [
+      {
+        title: 'Pedidos pendentes',
+        type: status.pending
+      },
+      {
+        title: 'Pedidos em produção',
+        type: status.inProgress
+      },
+      {
+        title: 'Saiu para entrega',
+        type: status.outForDelivery
+      },
+      {
+        title: 'Pedidos finalizados',
+        type: status.delivered
+      },
+    ]
+  }, [status]);
 
   function getHour(date) {
     const options = {
@@ -49,7 +70,14 @@ function Orders() {
             </TableRow>
           </THead>
           <TableBody>
-            {orders?.pending.map(order => {
+            {orders?.[orderStatus.type].length === 0 && (
+              <TableRow>
+                <TableCell>
+                  <Typography>Nenhum pedido com este status.</Typography>
+                </TableCell>
+              </TableRow>
+            )}
+            {orders?.[orderStatus.type].map(order => {
               const {
                 address,
                 number,
@@ -116,20 +144,5 @@ function Orders() {
     </MaterialTableContainer>
   ));
 }
-
-const allOrdersStatus = [
-  {
-    title: 'Pedidos pendentes'
-  },
-  {
-    title: 'Pedidos em produção'
-  },
-  {
-    title: 'Saiu para entrega'
-  },
-  {
-    title: 'Pedidos finalizados'
-  },
-]
 
 export default Orders;
