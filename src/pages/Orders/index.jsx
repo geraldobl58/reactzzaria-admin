@@ -8,9 +8,17 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { MaterialTableContainer, TableTitle, THead, Th, Subtitle } from './styles';
+import {
+  MaterialTableContainer,
+  TableTitle,
+  THead,
+  Th,
+  Subtitle
+} from './styles';
 
 import { useOrders } from 'hooks';
+
+import singularOrPlural from 'utils/singularOrPlural';
 
 function Orders() {
   const { orders } = useOrders();
@@ -54,12 +62,28 @@ function Orders() {
                       Pedido:
                     </Subtitle>
                     <ul>
-                      <li>
-                        <Typography>
-                          1 pizza MÉDIA de {' '}
-                          Frango com Catupiry e Calebresa
-                        </Typography>
-                      </li>
+                      {order.pizzas.map((pizza, index) => (
+                        <li key={index}>
+                          <Typography>
+                            {pizza.quantity}{' '}
+                            {singularOrPlural(pizza.quantity, 'pizza', 'pizzas')} {' '}
+                            {pizza.size.name.toUpperCase()} de {' '}
+                            {pizza.flavours
+                              .map(flavour => flavour.name)
+                              .reduce((acc, flavour, index, array) => {
+                                if (index === 0) {
+                                  return flavour;
+                                }
+
+                                if (index === array.length - 1) {
+                                  return `${acc} e ${flavour}`
+                                }
+                                return `${acc}, ${flavour}`
+                              }, '')
+                            }
+                          </Typography>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div>
