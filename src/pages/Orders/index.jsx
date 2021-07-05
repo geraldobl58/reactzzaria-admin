@@ -49,7 +49,7 @@ function Orders() {
             </TableRow>
           </THead>
           <TableBody>
-            {orders?.map(order => {
+            {orders?.pending.map(order => {
               const {
                 address,
                 number,
