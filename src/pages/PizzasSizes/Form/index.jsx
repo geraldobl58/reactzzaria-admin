@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
 
 import TextField from 'components/TextField';
 
@@ -16,7 +16,10 @@ import {
 import { Container } from './styles';
 
 function FormRegisterSize() {
-  const { add } = useCollection('sizes');
+  const { id } = useParams();
+
+  const { pizza, add } = usePizzaSize(id);
+  console.log(pizza);
 
   const history = useHistory();
 
@@ -85,6 +88,24 @@ function FormRegisterSize() {
       </Grid>
     </Container>
   )
+}
+
+const initialState = {
+  name: '',
+  size: '',
+  slices: '',
+  flavours: ''
+}
+
+function usePizzaSize(id) {
+  const { data, add } = useCollection('sizes');
+  const [pizza, setPizza] = useState(initialState);
+
+  useEffect(() => {
+    setPizza(data?.find(p => p.id === id) || initialState);
+  }, [data, id]);
+
+  return { pizza, add };
 }
 
 export default FormRegisterSize;
