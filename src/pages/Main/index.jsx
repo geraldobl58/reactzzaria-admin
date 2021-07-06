@@ -6,7 +6,8 @@ import {
   Divider,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  LinearProgress
 } from '@material-ui/core';
 
 import { DrawerContent, Content, MaterialDrawer } from './styles';
@@ -47,7 +48,7 @@ const Main = () => {
         </List>
       </MaterialDrawer>
       <Content>
-        <Suspense fallback='Carregando...'>
+        <Suspense fallback={<LinearProgress />}>
           <Switch>
             {menuItems.map(item => (
               <Route key={item.link} path={item.link} exact={item.exact}>

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import TextField from 'components/TextField';
 
@@ -18,7 +18,9 @@ import { Container } from './styles';
 function FormRegisterSize() {
   const { add } = useCollection('sizes');
 
-  const handleSubmit = useCallback((e) => {
+  const history = useHistory();
+
+  const handleSubmit = useCallback(async(e) => {
     e.preventDefault();
 
     const { name, size, slices, flavours } = e.target.elements;
@@ -30,9 +32,11 @@ function FormRegisterSize() {
       flavours: Number(flavours.value)
     };
 
-    add(normalizedData);
+    await add(normalizedData);
 
-  }, [add]);
+    history.push(PIZZAS_SIZES);
+
+  }, [add, history]);
 
   return (
     <Container>
