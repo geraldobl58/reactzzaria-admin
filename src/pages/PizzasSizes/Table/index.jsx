@@ -24,7 +24,7 @@ import {
   TitleContainer
 } from './styles';
 
-import { PIZZAS_SIZES, NEW } from 'routes';
+import { PIZZAS_SIZES, NEW, EDIT } from 'routes';
 
 import { useCollection } from 'hooks';
 
@@ -76,7 +76,11 @@ function TablePizzasSizes() {
                 {singularOrPlural(pizza.flavours, 'sabor', 'sabores')}
               </TableCell>
               <TableCell align='right'>
-                <MaterialButton startIcon={<Edit />}>
+                <MaterialButton
+                  startIcon={<Edit />}
+                  component={Link}
+                  to={`${PIZZAS_SIZES}${EDIT(pizza.id)}`}
+                >
                   Editar
                 </MaterialButton>
                 <MaterialButton
