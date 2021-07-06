@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 import TextField from 'components/TextField';
@@ -16,12 +16,25 @@ import {
 import { Container } from './styles';
 
 function FormRegisterSize() {
+  const [pizzaEditable, dispatch] = useReducer(reducer, initialState);
+  console.log(pizzaEditable)
+
   const { id } = useParams();
 
   const { pizza, add } = usePizzaSize(id);
-  console.log(pizza);
 
   const history = useHistory();
+
+  useEffect(() => {
+    dispatch({
+      type: 'EDIT',
+      payload: pizza
+    });
+  }, [pizza]);
+
+  const handleChange = useCallback((e) => {
+
+  }, []);
 
   const handleSubmit = useCallback(async(e) => {
     e.preventDefault();
@@ -60,18 +73,26 @@ function FormRegisterSize() {
         <TextField
           label='Nome para esse tamanho. Ex: Pequena'
           name='name'
+          value={pizzaEditable.name}
+          onChange={handleChange}
         />
         <TextField
           label='Diâmetro da pizza em cm'
           name='size'
+          value={pizzaEditable.size}
+          onChange={handleChange}
         />
          <TextField
           label='Quantidade de fatias'
           name='slices'
+          value={pizzaEditable.slices}
+          onChange={handleChange}
         />
          <TextField
           label='Quantide de sabores'
           name='flavours'
+          value={pizzaEditable.flavours}
+          onChange={handleChange}
         />
         <Grid item container justify='flex-end' spacing={2}>
           <Grid item>
@@ -95,6 +116,14 @@ const initialState = {
   size: '',
   slices: '',
   flavours: ''
+}
+
+function reducer(state, action) {
+  if (action.type === 'EDIT') {
+    return action.payload;
+  }
+
+  return  state;
 }
 
 function usePizzaSize(id) {
