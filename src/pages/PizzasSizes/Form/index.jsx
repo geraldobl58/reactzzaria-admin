@@ -10,7 +10,6 @@ import {
 
 import { Container } from './styles';
 
-
 function FormRegisterSize() {
   return (
     <Container>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Grid,
   Table,
   TableRow,
   TableCell,
@@ -8,10 +9,18 @@ import {
 } from '@material-ui/core';
 
 import {
+  Delete,
+  Edit,
+  Add
+} from '@material-ui/icons';
+
+import {
   MaterialTableContainer,
   TableTitle,
   THead,
-  Th
+  Th,
+  MaterialButton,
+  TitleContainer
 } from './styles';
 
 import { useCollection } from 'hooks';
@@ -23,9 +32,19 @@ function TablePizzasSizes() {
 
   return (
     <MaterialTableContainer>
-      <TableTitle>
-        Tamanhos cadastrados
-      </TableTitle>
+      <TitleContainer>
+        <Grid item>
+          <TableTitle>
+            Tamanhos cadastrados
+          </TableTitle>
+        </Grid>
+        <Grid item>
+          <MaterialButton color="primary" startIcon={<Add />}>
+            Adicionar novo tamanho
+          </MaterialButton>
+        </Grid>
+      </TitleContainer>
+
       <Table>
         <THead>
           <TableRow>
@@ -33,6 +52,7 @@ function TablePizzasSizes() {
             <Th>Diâmetro</Th>
             <Th>Fatias</Th>
             <Th>Sabores</Th>
+            <Th/>
           </TableRow>
         </THead>
         <TableBody>
@@ -44,6 +64,14 @@ function TablePizzasSizes() {
               <TableCell>
                 {pizza.flavours}{' '}
                 {singularOrPlural(pizza.flavours, 'sabor', 'sabores')}
+              </TableCell>
+              <TableCell align='right'>
+                <MaterialButton startIcon={<Edit />}>
+                  Editar
+                </MaterialButton>
+                <MaterialButton color='secondary' startIcon={<Delete />}>
+                  Remover
+                </MaterialButton>
               </TableCell>
             </TableRow>
           ))}

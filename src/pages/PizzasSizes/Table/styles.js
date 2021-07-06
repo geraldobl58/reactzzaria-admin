@@ -1,12 +1,32 @@
 import styled from 'styled-components';
 
 import {
+  Button,
+  Grid,
   TableContainer,
   TableHead,
   TableCell,
   Typography,
   Paper
 } from '@material-ui/core';
+
+export const MaterialButton = styled(Button).attrs({
+  variant: 'contained'
+})`
+   && {
+     margin-left: ${({ theme }) => theme.spacing(2)}px;
+   }
+`;
+
+export const TitleContainer = styled(Grid).attrs({
+  container: true,
+  justify: 'space-between',
+  alignItems: 'center'
+})`
+   && {
+     padding: ${({ theme }) => theme.spacing(3)}px;
+   }
+`;
 
 export const THead = styled(TableHead)`
    && {
