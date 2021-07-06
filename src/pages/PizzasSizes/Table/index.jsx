@@ -31,7 +31,7 @@ import { useCollection } from 'hooks';
 import singularOrPlural from 'utils/singularOrPlural';
 
 function TablePizzasSizes() {
-  const pizzasSizes = useCollection('sizes');
+  const { data: pizzasSizes } = useCollection('sizes');
   const newSizePath = useRouteMatch(`${PIZZAS_SIZES}${NEW}`)
 
   return (
