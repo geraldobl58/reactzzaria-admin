@@ -31,14 +31,14 @@ import { useCollection } from 'hooks';
 import singularOrPlural from 'utils/singularOrPlural';
 
 function TablePizzasSizes() {
-  const { data: pizzasSizes } = useCollection('sizes');
+  const { data: pizzasSizes, remove } = useCollection('sizes');
   const newSizePath = useRouteMatch(`${PIZZAS_SIZES}${NEW}`)
 
   return (
     <MaterialTableContainer>
       <TitleContainer>
         <Grid item>
-          <TableTitle>
+          <TableTitle style={{ padding: 0 }}>
             Tamanhos cadastrados
           </TableTitle>
         </Grid>
@@ -79,7 +79,11 @@ function TablePizzasSizes() {
                 <MaterialButton startIcon={<Edit />}>
                   Editar
                 </MaterialButton>
-                <MaterialButton color='secondary' startIcon={<Delete />}>
+                <MaterialButton
+                  color='secondary'
+                  startIcon={<Delete />}
+                  onClick={() => remove(pizza.id)}
+                >
                   Remover
                 </MaterialButton>
               </TableCell>
