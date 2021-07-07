@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import {
   Grid,
   Table,
   TableRow,
   TableCell,
-  TableBody
+  TableBody,
+  List,
+  ListItem as MaterialListItem,
+  ListItemText
 } from '@material-ui/core';
 
 import {
@@ -25,10 +29,6 @@ import {
 } from './styles';
 
 import { PIZZAS_FLAVOURS, NEW, EDIT } from 'routes';
-
-import { useCollection } from 'hooks';
-
-import singularOrPlural from 'utils/singularOrPlural';
 
 function TablePizzasFlavours() {
   const newFlavourPath = useRouteMatch(`${PIZZAS_FLAVOURS}${NEW}`);
@@ -57,45 +57,70 @@ function TablePizzasFlavours() {
       <Table>
         <THead>
           <TableRow>
+            <Th>Foto</Th>
             <Th>Nome</Th>
-            <Th>Diâmetro</Th>
-            <Th>Fatias</Th>
-            <Th>Sabores</Th>
+            <Th>Valores</Th>
             <Th/>
           </TableRow>
         </THead>
         <TableBody>
-          {/* {pizzasSizes?.map(pizza => (
-            <TableRow key={pizza.id}>
-              <TableCell>{pizza.name}</TableCell>
-              <TableCell>{pizza.size}</TableCell>
-              <TableCell>{pizza.slices}</TableCell>
-              <TableCell>
-                {pizza.flavours}{' '}
-                {singularOrPlural(pizza.flavours, 'sabor', 'sabores')}
-              </TableCell>
-              <TableCell align='right'>
-                <MaterialButton
-                  startIcon={<Edit />}
-                  component={Link}
-                  to={`${PIZZAS_SIZES}${EDIT(pizza.id)}`}
-                >
-                  Editar
-                </MaterialButton>
-                <MaterialButton
-                  color='secondary'
-                  startIcon={<Delete />}
-                  // onClick={() => remove(pizza.id)}
-                >
-                  Remover
-                </MaterialButton>
-              </TableCell>
-            </TableRow>
-          ))} */}
+          <TableRow >
+            <TableCell>
+              <img
+                src=""
+                alt=""
+                style={{
+                  background: '#fc0',
+                  display: 'block',
+                  height: '50px',
+                  width: '50px',
+              }}
+            />
+            </TableCell>
+            <TableCell>Sabor da pizza</TableCell>
+            <TableCell>
+              <List>
+                <ListItem name='Broto' value={10} />
+                <ListItem name='Pequena' value={20} />
+                <ListItem name='Média' value={30} />
+                <ListItem name='Grande' value={40} />
+              </List>
+            </TableCell>
+
+            <TableCell align='right'>
+              <MaterialButton
+                startIcon={<Edit />}
+                component={Link}
+                to={`${PIZZAS_FLAVOURS}${EDIT(1)}`}
+              >
+                Editar
+              </MaterialButton>
+              <MaterialButton
+                color='secondary'
+                startIcon={<Delete />}
+                onClick={() => {}}
+              >
+                Remover
+              </MaterialButton>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </MaterialTableContainer>
   )
+}
+
+const ListItem = ({ name, value }) => (
+  <MaterialListItem>
+    <ListItemText>
+      <strong>{name}</strong> R$ {value}
+    </ListItemText>
+  </MaterialListItem>
+)
+
+ListItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
 }
 
 export default TablePizzasFlavours;
