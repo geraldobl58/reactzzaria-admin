@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useCallback,
   useReducer,
+  useMemo,
   useRef
 } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -31,6 +32,11 @@ function FormRegisterSize() {
   const history = useHistory();
 
   const nameField = useRef();
+
+  const texts = useMemo(() => ({
+    title: id ? 'Editar tamanho' : 'Cadastrar novo tamanho',
+    button: id ? 'Salvar' : 'Cadastrar'
+  }), [id]);
 
   useEffect(() => {
     nameField.current.focus();
@@ -76,7 +82,7 @@ function FormRegisterSize() {
     <Container>
       <Grid item xs={12}>
         <Typography variant='h4'>
-          Cadastrar novo tamanho
+          {texts.title}
         </Typography>
       </Grid>
 
@@ -121,7 +127,7 @@ function FormRegisterSize() {
           </Grid>
           <Grid item>
             <Button variant='contained' color='primary' type='submit'>
-              Cadastrar
+              {texts.button}
             </Button>
           </Grid>
         </Grid>
