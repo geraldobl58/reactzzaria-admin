@@ -12,12 +12,9 @@ function AuthProvider({ children }) {
   });
 
   useEffect(() => {
-    console.log('DADOS DO USUARIO', userInfo.user);
     const uid = userInfo.user?.uid || 'EMPTY';
     db.collection('users').doc(uid).get().then(doc => {
-      console.log('EXISTE?', doc.exists, uid);
       if (doc.exists || uid === 'EMPTY') {
-        console.log('JÁ EXISTE OU É EMPTY', doc, uid);
         return;
       }
 

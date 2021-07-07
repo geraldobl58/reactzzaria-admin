@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { Link, Switch, Route, useLocation } from 'react-router-dom';
 
 import {
@@ -20,6 +20,10 @@ const PizzasFlavours = lazy(() => import('pages/PizzasFlavours'));
 
 const Main = () => {
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <React.Fragment>
