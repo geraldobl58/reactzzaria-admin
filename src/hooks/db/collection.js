@@ -30,6 +30,10 @@ function useCollection(collection) {
     return db.collection(collection).add(data);
   }, [collection]);
 
+  const edit = useCallback((id, data) => {
+    return db.collection(collection).doc(id).set(data);
+  }, [collection]);
+
   const remove = useCallback(async (id) => {
     await db.collection(collection).doc(id).delete();
     fetchCollectionData();
@@ -39,7 +43,7 @@ function useCollection(collection) {
     fetchCollectionData();
   }, [pathname, fetchCollectionData]);
 
-  return { data, add, remove };
+  return { data, add, edit, remove };
 }
 
 export default useCollection;

@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useReducer,
+  useRef
+} from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 import TextField from 'components/TextField';
@@ -17,13 +23,18 @@ import { Container } from './styles';
 
 function FormRegisterSize() {
   const [pizzaEditable, dispatch] = useReducer(reducer, initialState);
-  console.log(pizzaEditable)
 
   const { id } = useParams();
 
-  const { pizza, add } = usePizzaSize(id);
+  const { pizza, add, edit } = usePizzaSize(id);
 
   const history = useHistory();
+
+  const nameField = useRef();
+
+  useEffect(() => {
+    nameField.current.focus();
+  }, [id]);
 
   useEffect(() => {
     dispatch({
@@ -33,26 +44,33 @@ function FormRegisterSize() {
   }, [pizza]);
 
   const handleChange = useCallback((e) => {
-
+    const { name, value } = e.target;
+    dispatch({
+      type: 'UPDATE_FIELD',
+      payload: {
+        [name]: value
+      }
+    })
   }, []);
 
   const handleSubmit = useCallback(async(e) => {
     e.preventDefault();
 
-    const { name, size, slices, flavours } = e.target.elements;
+    const { name, size, slices, flavours } = pizzaEditable;
 
     const normalizedData = {
-      name: name.value,
-      size: Number(size.value),
-      slices: Number(slices.value),
-      flavours: Number(flavours.value)
+      name,
+      size: Number(size),
+      slices: Number(slices),
+      flavours: Number(flavours)
     };
 
-    await add(normalizedData);
+    if (id) await edit(id, normalizedData);
+    else await add(normalizedData);
 
     history.push(PIZZAS_SIZES);
 
-  }, [add, history]);
+  }, [id, add, edit, history, pizzaEditable]);
 
   return (
     <Container>
@@ -75,6 +93,7 @@ function FormRegisterSize() {
           name='name'
           value={pizzaEditable.name}
           onChange={handleChange}
+          inputRef={nameField}
         />
         <TextField
           label='Diâmetro da pizza em cm'
@@ -123,18 +142,25 @@ function reducer(state, action) {
     return action.payload;
   }
 
+  if (action.type === 'UPDATE_FIELD') {
+    return {
+      ...state,
+      ...action.payload
+    }
+  }
+
   return  state;
 }
 
 function usePizzaSize(id) {
-  const { data, add } = useCollection('sizes');
+  const { data, add, edit } = useCollection('sizes');
   const [pizza, setPizza] = useState(initialState);
 
   useEffect(() => {
     setPizza(data?.find(p => p.id === id) || initialState);
   }, [data, id]);
 
-  return { pizza, add };
+  return { pizza, add, edit };
 }
 
 export default FormRegisterSize;
