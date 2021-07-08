@@ -83,7 +83,7 @@ function FormRegisterFlavour() {
 
     history.push(PIZZAS_FLAVOURS);
 
-  }, [add, id, history, pizzaEditable]);
+  }, [add, edit, history, pizzaEditable]);
 
   return (
     <Container>

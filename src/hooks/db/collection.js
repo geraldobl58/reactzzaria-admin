@@ -39,11 +39,18 @@ function useCollection(collection) {
     fetchCollectionData();
   }, [collection, fetchCollectionData]);
 
+  const removePizzaSize = useCallback(async (id) => {
+    db.runTransaction((transaction) => {
+      console.log(transaction);
+      transaction.delete(id);
+    });
+  }, []);
+
   useEffect(() => {
     fetchCollectionData();
   }, [pathname, fetchCollectionData]);
 
-  return { data, add, edit, remove };
+  return { data, add, edit, remove, removePizzaSize };
 }
 
 export default useCollection;
