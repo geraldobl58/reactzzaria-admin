@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { db } from 'services/firebase';
+import firebase, { db } from 'services/firebase';
 
 import { useMounted } from 'hooks';
 
@@ -40,11 +40,32 @@ function useCollection(collection) {
   }, [collection, fetchCollectionData]);
 
   const removePizzaSize = useCallback(async (id) => {
-    db.runTransaction((transaction) => {
-      console.log(transaction);
-      transaction.delete(id);
+    const pizzaSizeRef = db.collection('sizes').doc(id);
+
+    db.runTransaction(async(transaction) => {
+      const sizeDoc = await transaction.get(pizzaSizeRef);
+
+      if (!sizeDoc.exists) {
+        throw new Error('Esse tamanho não existe!')
+      }
+
+      transaction.delete(pizzaSizeRef);
+
+      const allFlavours = await db.collection('flavours').get();
+
+      allFlavours.forEach(flavour => {
+        const { [id]: sizeId, ...value } = flavour.data().value;
+        const flavourRef = db.collection('flavours').doc(flavour.id);
+        transaction.update(flavourRef, { value });
+      });
+
+    }).then(() => {
+      console.log('Finalizou transaction com sucesso!');
+      fetchCollectionData();
+    }).catch((e) => {
+      console.log(e);
     });
-  }, []);
+  }, [fetchCollectionData]);
 
   useEffect(() => {
     fetchCollectionData();
