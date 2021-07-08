@@ -1,4 +1,5 @@
 import React, {
+  useState,
   useEffect,
   useMemo,
   useCallback,
@@ -29,7 +30,8 @@ function FormRegisterFlavour() {
   const history = useHistory();
 
   const { data: pizzasSizes } = useCollection('sizes');
-  const { add } = useCollection('flavours');
+  const { pizza, add } = usePizzaFlavour(id);
+  console.log(pizza);
 
   const texts = useMemo(() => ({
     title: id ? 'Editar tamanho' : 'Cadastrar novo sabor',
@@ -111,6 +113,23 @@ function FormRegisterFlavour() {
       </Grid>
     </Container>
   )
+}
+
+const initialState = {
+  name: '',
+  image: '',
+  value: {}
+};
+
+function usePizzaFlavour(id) {
+  const { data, add, edit } = useCollection('flavours');
+  const [pizza, setPizza] = useState(initialState);
+
+  useEffect(() => {
+    setPizza(data?.find(p => p.id === id) || initialState);
+  }, [data, id]);
+
+  return { pizza, add, edit };
 }
 
 export default FormRegisterFlavour;
