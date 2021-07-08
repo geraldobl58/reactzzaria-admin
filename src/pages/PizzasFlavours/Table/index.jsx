@@ -35,6 +35,7 @@ import { useCollection } from 'hooks';
 function TablePizzasFlavours() {
   const newFlavourPath = useRouteMatch(`${PIZZAS_FLAVOURS}${NEW}`);
   const { data: pizzasFlavours, remove } = useCollection('flavours');
+  const { data: pizzasSizes } = useCollection('sizes');
 
   return (
     <MaterialTableContainer>
@@ -75,10 +76,17 @@ function TablePizzasFlavours() {
               <TableCell>{pizza.name}</TableCell>
               <TableCell>
                 <List>
-                  <ListItem name='Broto' value={10} />
-                  <ListItem name='Pequena' value={20} />
-                  <ListItem name='Média' value={30} />
-                  <ListItem name='Grande' value={40} />
+                  {Object.entries(pizza.value).map(([sizeId, value]) => {
+                    const sizeName = pizzasSizes
+                      ?.find(s => s.id === sizeId)
+                      ?.name ;
+
+                    return <ListItem
+                      key={sizeId}
+                      name={sizeName}
+                      value={value}
+                    />
+                  })}
                 </List>
               </TableCell>
 
@@ -106,7 +114,7 @@ function TablePizzasFlavours() {
   )
 }
 
-const ListItem = ({ name, value }) => (
+const ListItem = ({ name = '', value }) => (
   <MaterialListItem>
     <ListItemText>
       <strong>{name}</strong> R$ {value}
@@ -115,7 +123,7 @@ const ListItem = ({ name, value }) => (
 )
 
 ListItem.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   value: PropTypes.number.isRequired,
 }
 
