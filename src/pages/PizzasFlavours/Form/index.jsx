@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
+  useReducer,
   useRef
 } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -31,7 +32,7 @@ function FormRegisterFlavour() {
 
   const { data: pizzasSizes } = useCollection('sizes');
   const { pizza, add } = usePizzaFlavour(id);
-  console.log(pizza);
+  const [pizzaEditable, dispatch] = useReducer(reducer, initialState);
 
   const texts = useMemo(() => ({
     title: id ? 'Editar tamanho' : 'Cadastrar novo sabor',
@@ -41,6 +42,17 @@ function FormRegisterFlavour() {
   useEffect(() => {
     nameField.current.focus();
   }, [id]);
+
+  useEffect(() => {
+    dispatch({
+      type: 'EDIT',
+      payload: pizza
+    })
+  }, [pizza]);
+
+  const handleChange = useCallback(async(e) => {
+
+  }, []);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -78,11 +90,15 @@ function FormRegisterFlavour() {
         <TextField
           label='Nome do sabor'
           name='name'
+          value={pizzaEditable.name}
+          onChange={handleChange}
           inputRef={nameField}
         />
          <TextField
           label='Link para imagem desse sabor'
           name='image'
+          value={pizzaEditable.image}
+          onChange={handleChange}
         />
 
         <Grid item xs={12}>
@@ -120,6 +136,14 @@ const initialState = {
   image: '',
   value: {}
 };
+
+function reducer(state, action) {
+  if (action.type === 'EDIT') {
+    return action.payload
+  }
+
+  return state;
+}
 
 function usePizzaFlavour(id) {
   const { data, add, edit } = useCollection('flavours');
